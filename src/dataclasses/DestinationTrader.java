@@ -1,4 +1,5 @@
 package dataclasses;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,10 +12,9 @@ import exceptions.DestinationTraderException;
 import exceptions.VoucherException;
 import repositories.VoucherRepo;
 
-
 //DestinationTrader class
 public class DestinationTrader {
-	
+
 	private static final String EMAIL_PATTERN =
 
 			"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -23,7 +23,7 @@ public class DestinationTrader {
 
 	private static Integer id = 0;
 	private Integer destinationTraderID;
-	
+
 	private final String traderName;
 	private String traderPassword;
 	private final String email;
@@ -38,9 +38,9 @@ public class DestinationTrader {
 			throws DestinationTraderException {
 		setInformation(information);
 		setAddress(address);
-		if(traderName.trim().length() > 3)
+		if (traderName.trim().length() > 3)
 			this.traderName = traderName;
-		else 
+		else
 			throw new DestinationTraderException("Invalid traderName");
 		setTraderPassword(traderPassword);
 		if (checkForPattern(email))
@@ -54,7 +54,7 @@ public class DestinationTrader {
 
 	public void setTraderPassword(String traderPassword) {
 		if (traderPassword.trim().length() >= 4 && traderPassword.trim().length() <= 19)
-		this.traderPassword = traderPassword;
+			this.traderPassword = traderPassword;
 	}
 
 	public void setRating() {
@@ -66,17 +66,17 @@ public class DestinationTrader {
 	}
 
 	public void addComment(Comment c) {
-		if( c!= null) {
+		if (c != null) {
 			this.comments.add(c);
 		}
+		c = null;
 	}
+
 	public void addVoucher(Voucher v) throws VoucherException {
-		if (v != null) {
-			this.vouchers.put(v.getVoucherID(), v);
-			VoucherRepo.getInstance().addNewVoucher(v);
-		} else {
-			System.out.println("Add existing voucher");
-		}
+		if (v == null)
+			throw new VoucherException("Invalid voucher");
+		VoucherRepo.getInstance().addNewVoucher(v);
+		this.vouchers.put(v.getVoucherID(), v);
 	}
 
 	public void removeVoucher(Voucher v) {
@@ -128,7 +128,8 @@ public class DestinationTrader {
 	public Integer getDestinationTraderID() {
 		return destinationTraderID;
 	}
-	
+
+	// wrong encapsulation
 	public List<Comment> getComments() {
 		return Collections.unmodifiableList(comments);
 	}
@@ -146,7 +147,6 @@ public class DestinationTrader {
 		}
 		return false;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -162,7 +162,5 @@ public class DestinationTrader {
 	public void setLogin(boolean isLogin) {
 		this.isLogin = isLogin;
 	}
-
-
 
 }

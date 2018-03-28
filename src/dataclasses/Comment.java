@@ -16,6 +16,7 @@ public class Comment {
 		setInfo(info);
 		setRating(rating);
 		this.date = LocalDate.now();
+		setDestination(destination);
 	}
 
 	public User getUser() {

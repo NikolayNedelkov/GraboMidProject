@@ -16,6 +16,7 @@ public class Voucher {
 	private DestinationTrader destination;
 
 	public Voucher(String category, Price price, VoucherInformation vInfo, DestinationTrader destination) {
+		setCategory(category);
 		setPrice(price);
 		setvInfo(vInfo);
 		setDestination(destination);

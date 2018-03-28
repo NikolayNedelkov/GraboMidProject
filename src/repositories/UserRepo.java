@@ -228,9 +228,10 @@ public class UserRepo {
 						if (destinationTrader.getDestinationTraderID().equals(id2)) {
 							MainMenu.displayHeader("Destination Trader Found");
 							String comment = MainMenu.askQuestion("Enter your comment: ", null);
-							String rating = MainMenu.askQuestion("Enter rating between 0 and 5", null);
+							String rating = MainMenu.askQuestion("Enter rating between 0 and 5: ", null);
 							Double rating2 = Double.parseDouble(rating);
-							destinationTrader.addComment(new Comment(this.user, destinationTrader, comment, rating2));
+							DestinationTraderRepo.getInstance().addNewComment(new Comment(this.user, destinationTrader, comment, rating2));
+//							destinationTrader.addComment(new Comment(this.user, destinationTrader, comment, rating2));
 						}
 					}
 				} catch (Exception e) {
