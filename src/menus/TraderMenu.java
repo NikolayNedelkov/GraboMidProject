@@ -46,7 +46,7 @@ public class TraderMenu {
 	        switch (choice) {
 	            case "back":
 	                System.out.println("Going Back.");
-	                UserMenu.back = true;
+	                TraderMenu.back = true;
 	                MainMenu.exit = false;
 	                mainMenu.runMenu();
 	                break;

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.crypto.NullCipher;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -203,8 +205,12 @@ public class DestinationTraderRepo {
 
 	public void viewAllVouchers() {
 		try {
-			for (Voucher v : this.destinationTrader.getVouchers().values()) {
-				System.out.println(v.toString());
+			if (this.destinationTrader.getVouchers().isEmpty()) {
+				MainMenu.displayHeader("You don't have Vouchers");
+			} else {
+				for (Voucher v : this.destinationTrader.getVouchers().values()) {
+					System.out.println(v.toString());
+				}
 			}
 		} catch (NullPointerException e) {
 			MainMenu.displayHeader("Plese Login as Trader");
@@ -236,14 +242,14 @@ public class DestinationTraderRepo {
 		}
 
 	}
-//	// Method that adds new vouchers in Grabo/Json file
-//			public void addNewVoucher(Voucher v) throws VoucherException {
-//				if (v== null)
-//					throw new VoucherException("Invalid vouhcer");
-//				destinationTrader.getVouchers().put(v.getVoucherID(), value);
-//				this.writeDestinationTradersToJSONFile(allDestinationTraders);
-//
-//			}
+	// // Method that adds new vouchers in Grabo/Json file
+	// public void addNewVoucher(Voucher v) throws VoucherException {
+	// if (v== null)
+	// throw new VoucherException("Invalid vouhcer");
+	// destinationTrader.getVouchers().put(v.getVoucherID(), value);
+	// this.writeDestinationTradersToJSONFile(allDestinationTraders);
+	//
+	// }
 
 	public void removeVoucher() {
 		// TODO Auto-generated method stub
@@ -252,8 +258,15 @@ public class DestinationTraderRepo {
 
 	public void viewAllComments() {
 		try {
-			for (Comment c : this.destinationTrader.getComments()) {
-				System.out.println(c.toString());
+			if (this.destinationTrader.getComments().isEmpty()) {
+				MainMenu.displayHeader("There are no Comments !");
+			}
+			try {
+				for (Comment c : this.destinationTrader.getComments()) {
+					System.out.println(c.toString());
+				}
+			} catch (NullPointerException e) {
+				MainMenu.displayHeader("Plese Login as Trader");
 			}
 		} catch (NullPointerException e) {
 			MainMenu.displayHeader("Plese Login as Trader");
@@ -263,7 +276,7 @@ public class DestinationTraderRepo {
 
 	public void viewYourRating() {
 		try {
-			System.out.println("Your rating is " + this.destinationTrader.getRating());
+			MainMenu.displayHeader("Your rating is " + this.destinationTrader.getRating());
 		} catch (NullPointerException e) {
 			MainMenu.displayHeader("Plese Login as Trader");
 		}

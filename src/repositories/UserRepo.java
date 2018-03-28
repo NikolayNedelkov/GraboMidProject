@@ -101,7 +101,7 @@ public class UserRepo {
 
 	// Logout method
 	public void logOut() {
-		if (this.user!=null && this.user.isLogin()) {
+		if (this.user != null && this.user.isLogin()) {
 			try {
 				this.user.setLogin(false);
 				MainMenu.displayHeader("Logout Successful");
@@ -156,12 +156,17 @@ public class UserRepo {
 	public void viewCart() {
 		if (this.user != null) {
 			try {
-				for (Voucher v : user.getCart().getMyVouchers().values()) {
-					System.out.println(v.toString());
+				if (user.getCart().getMyVouchers().isEmpty()) {
+					MainMenu.displayHeader("Cart is EMPTY !");
+				} else {
+					for (Voucher v : user.getCart().getMyVouchers().values()) {
+						System.out.println(v.toString());
+					}
 				}
 			} catch (NullPointerException e) {
 				MainMenu.displayHeader("Please log in first");
 			}
+
 		} else {
 			MainMenu.displayHeader("Please log in first");
 		}
@@ -230,8 +235,10 @@ public class UserRepo {
 							String comment = MainMenu.askQuestion("Enter your comment: ", null);
 							String rating = MainMenu.askQuestion("Enter rating between 0 and 5: ", null);
 							Double rating2 = Double.parseDouble(rating);
-							DestinationTraderRepo.getInstance().addNewComment(new Comment(this.user, destinationTrader, comment, rating2));
-//							destinationTrader.addComment(new Comment(this.user, destinationTrader, comment, rating2));
+							DestinationTraderRepo.getInstance()
+									.addNewComment(new Comment(this.user, destinationTrader, comment, rating2));
+							// destinationTrader.addComment(new Comment(this.user, destinationTrader,
+							// comment, rating2));
 						}
 					}
 				} catch (Exception e) {
