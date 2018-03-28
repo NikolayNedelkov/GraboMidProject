@@ -117,7 +117,7 @@ public class UserRepo {
 
 	// Method that registers user in Grabo
 	public void registerUser() {
-		MainMenu.displayHeader("Create an Account");
+		MainMenu.displayHeader("Create user Account");
 		String name = MainMenu.askQuestion("Please enter your account username: ", null);
 		String password = MainMenu.askQuestion("Please enter your account password: ", null);
 		String email = MainMenu.askQuestion("Please enter your account email: ", null);

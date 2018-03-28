@@ -5,12 +5,11 @@ public class VoucherInformation {
 	private String information;
 	private String conditions;
 	private String providedFrom;
-	private Voucher voucher;
 
-	public VoucherInformation(String information, String conditions, Voucher v) {
+	public VoucherInformation(String information, String conditions, String providetFrom) {
 		this.information = information;
 		this.conditions = conditions;
-		this.providedFrom = v.getDestination().getInformation();
+		this.providedFrom = providetFrom;
 	}
 
 	public String getInformation() {

@@ -12,23 +12,27 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import dataclasses.Comment;
 import dataclasses.DestinationTrader;
+import dataclasses.Price;
+import dataclasses.Voucher;
+import dataclasses.VoucherInformation;
 import exceptions.DestinationTraderException;
-
-
+import exceptions.VoucherException;
+import menus.MainMenu;
 
 public class DestinationTraderRepo {
-	
+
 	private DestinationTrader destinationTrader;
 	private Map<Integer, DestinationTrader> allDestinationTraders;
 	private static DestinationTraderRepo destinationTraderRepo = null;
 	private static final String DESTINATION_TRADER_JSON_FILE = ".//Json//destinationTraders.json";
 	
+
 	private DestinationTraderRepo() {
 		this.allDestinationTraders = new TreeMap<Integer, DestinationTrader>();
 		this.allDestinationTraders = getDestinationTraderFromJSONFILE();
 	}
-
 
 	public static DestinationTraderRepo getInstance() {
 		if (destinationTraderRepo == null) {
@@ -36,7 +40,7 @@ public class DestinationTraderRepo {
 		}
 		return destinationTraderRepo;
 	}
-	
+
 	private static Map<Integer, DestinationTrader> getDestinationTraderFromJSONFILE() {
 		Gson gson = new Gson();
 		Map<Integer, DestinationTrader> map = null;
@@ -56,7 +60,7 @@ public class DestinationTraderRepo {
 		return map;
 
 	}
-	
+
 	private void writeDestinationTradersToJSONFile(Map<Integer, DestinationTrader> allDestinationTraders) {
 		Gson gson = new Gson();
 		String json = gson.toJson(allDestinationTraders);
@@ -68,17 +72,142 @@ public class DestinationTraderRepo {
 			e.printStackTrace();
 		}
 	}
-	
-	public void addNewDestinationTrader (DestinationTrader destinationTrader) throws DestinationTraderException {
+
+	public void addNewDestinationTrader(DestinationTrader destinationTrader) throws DestinationTraderException {
 		if (destinationTrader == null)
 			throw new DestinationTraderException("Invalid destination trader");
 		allDestinationTraders.put(destinationTrader.getDestinationTraderID(), destinationTrader);
 		this.writeDestinationTradersToJSONFile(allDestinationTraders);
 
 	}
+
 	public Map<Integer, DestinationTrader> getAllDestinationTraders() {
 		return Collections.unmodifiableMap(allDestinationTraders);
 	}
 
+	public void registerTrader() {
+		MainMenu.displayHeader("Create trader Account");
+		String name = MainMenu.askQuestion("Please enter your trader account username: ", null);
+		String password = MainMenu.askQuestion("Please enter your trader account password: ", null);
+		String email = MainMenu.askQuestion("Please enter your trader account email: ", null);
+		String information = MainMenu.askQuestion("Please enter your trader account information: ", null);
+		String address = MainMenu.askQuestion("Please enter your trader account physical address: ", null);
+
+		try {
+			if (password.trim().length() >= 4 && password.trim().length() <= 19 && name.trim().length() > 3) {
+				DestinationTrader dt = new DestinationTrader(name, password, email, information, address);
+				this.addNewTrader(dt);
+				MainMenu.displayHeader("Registration Succesfull");
+			} else {
+				throw new DestinationTraderException("Wrong trader information");
+			}
+		} catch (DestinationTraderException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	// Method that adds new user in Grabo/Json file
+	public void addNewTrader(DestinationTrader dt) throws DestinationTraderException {
+		if (dt == null)
+			throw new DestinationTraderException("Invalid trader");
+		allDestinationTraders.put(dt.getDestinationTraderID(), dt);
+		this.writeDestinationTradersToJSONFile(allDestinationTraders);
+
+	}
+
+	public void login() {
+		MainMenu.displayHeader("Login Form");
+		String name = MainMenu.askQuestion("Please enter trader your username: ", null);
+		String password = MainMenu.askQuestion("Please enter your trader password: ", null);
+		for (DestinationTrader dt : allDestinationTraders.values()) {
+			if (name.equals(dt.getTraderName()) && password.equals(dt.getTraderPassword())) {
+				dt.setLogin(true);
+				MainMenu.displayHeader("Login Succesfull");
+				this.destinationTrader = allDestinationTraders.get(dt.getDestinationTraderID());
+				break;
+			}
+		}
+		if (this.destinationTrader == null)
+			try {
+				throw new DestinationTraderException("Something went wrong");
+			} catch (DestinationTraderException e) {
+				System.out.println(e.getMessage());
+			}
+
+	}
+
+	public void logOut() {
+		if (this.destinationTrader != null && this.destinationTrader.isLogin()) {
+			try {
+				this.destinationTrader.setLogin(false);
+				MainMenu.displayHeader("Logout Successful");
+				this.destinationTrader = null;
+			} catch (NullPointerException e) {
+				MainMenu.displayHeader("No one is Logged in");
+			}
+		} else {
+			MainMenu.displayHeader("No one is Logged in");
+		}
+
+	}
+
+	public void viewAllVouchers() {
+		try {
+			for (Voucher v : this.destinationTrader.getVouchers().values()) {
+				System.out.println(v.toString());
+			}
+		} catch (NullPointerException e) {
+			MainMenu.displayHeader("Plese Login as Trader");
+		}
+
+	}
+
+	public void addVoucher() {
+		if(this.destinationTrader != null) {
+			try {
+				MainMenu.displayHeader("Enter Voucher Information: ");
+				String category = MainMenu.askQuestion("Please enter voucher category: ", null);
+				String price = MainMenu.askQuestion("Please enter voucher oldPrice: ", null);
+				String disc = MainMenu.askQuestion("Please enter voucher discount between 0 and 100%: ", null);
+				Integer oldPrice = Integer.valueOf(price);
+				Integer discount = Integer.valueOf(disc);
+				String information = MainMenu.askQuestion("Please enter voucher information: ", null);
+				String conditions = MainMenu.askQuestion("Plese enter voucher conditons", null);
+				Voucher v = new Voucher(category, new Price(oldPrice, discount), new VoucherInformation(information, conditions, destinationTrader.getTraderName()), this.destinationTrader);
+				this.destinationTrader.addVoucher(v);
+			} catch (VoucherException e) {
+				MainMenu.displayHeader("Please add valid voucher information");
+			}
+		} else {
+			MainMenu.displayHeader("Please login as trader first");
+		}
+		
+	}
+
+	public void removeVoucher() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void viewAllComments() {
+		try {
+			for (Comment c : this.destinationTrader.getComments()) {
+				System.out.println(c.toString());
+			}
+		} catch (NullPointerException e) {
+			MainMenu.displayHeader("Plese Login as Trader");
+		}
+		
+	}
+
+	public void viewYourRating() {
+		try {
+			System.out.println("Your rating is " + this.destinationTrader.getRating());
+		} catch (NullPointerException e) {
+			MainMenu.displayHeader("Plese Login as Trader");
+		}
+		
+	}
 
 }

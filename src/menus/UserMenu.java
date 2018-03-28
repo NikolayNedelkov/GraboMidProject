@@ -32,7 +32,7 @@ public class UserMenu {
 	
 	//Printing User Menu Options
 	public void printMenu() {
-        MainMenu.displayHeader("Please select a Menu: ");
+        MainMenu.displayHeader("Please select an Option from User Menu: ");
         System.out.println("-> Register");
         System.out.println("-> Login");
         System.out.println("-> Logout");

@@ -12,36 +12,16 @@ public class Voucher {
 	private String category;
 	private Price price;
 	private VoucherInformation vInfo;
-	private int numberOfVouchers;
 	private LocalDateTime date;
 	private DestinationTrader destination;
-//	private int periodOfVoucherInDays;
-//	private LocalDateTime remainingTime;
 
-	public Voucher(String category, Price price, VoucherInformation vInfo, int numberOfVouchers, DestinationTrader destination/*,
-			int periodOfVoucherInDays*/) {
+	public Voucher(String category, Price price, VoucherInformation vInfo, DestinationTrader destination) {
 		setPrice(price);
 		setvInfo(vInfo);
-		setNumberOfVouchers(numberOfVouchers);
 		setDestination(destination);
 		this.date = LocalDateTime.now();
 		this.voucherID = ++id;
-//		setPeriodOfVoucherInDays(periodOfVoucherInDays);
 	}
-
-//	public int getPeriodOfVoucherInDays() {
-//		return periodOfVoucherInDays;
-//	}
-//
-//	public void setPeriodOfVoucherInDays(int periodOfVoucherInDays) {
-//		if (periodOfVoucherInDays > 0)
-//			this.periodOfVoucherInDays = periodOfVoucherInDays;
-//	}
-//
-//	public LocalDateTime getRemainingTime() {
-//		return this.date.plusDays(periodOfVoucherInDays);
-//	}
-
 
 
 	public String getCategory() {
@@ -78,17 +58,6 @@ public class Voucher {
 			this.vInfo = vInfo;
 		else
 			System.out.println("Enter Valid Voucher Info");
-	}
-
-	public int getNumberOfVouchers() {
-		return numberOfVouchers;
-	}
-
-	public void setNumberOfVouchers(int numberOfVouchers) {
-		if (numberOfVouchers > 0)
-			this.numberOfVouchers = numberOfVouchers;
-		else
-			System.out.println("Invalid number Of vouchers");
 	}
 
 	public void setDestination(DestinationTrader destination) {

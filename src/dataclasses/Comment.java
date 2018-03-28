@@ -58,4 +58,10 @@ public class Comment {
 			this.destination = destination;
 	}
 
+	@Override
+	public String toString() {
+		return "Comment [user=" + user + ", info=" + info + ", rating=" + rating + ", date=" + date + ", destination="
+				+ destination + "]";
+	}
+	
 }
