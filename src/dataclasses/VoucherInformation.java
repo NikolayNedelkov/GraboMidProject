@@ -38,4 +38,10 @@ public class VoucherInformation {
 		return providedFrom;
 	}
 
+	@Override
+	public String toString() {
+		return "VoucherInformation [information=" + information + ", conditions=" + conditions + ", providedFrom="
+				+ providedFrom + "]";
+	}
+	
 }

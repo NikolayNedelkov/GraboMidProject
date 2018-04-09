@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.crypto.NullCipher;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +20,6 @@ import dataclasses.DestinationTrader;
 import dataclasses.Price;
 import dataclasses.Voucher;
 import dataclasses.VoucherInformation;
-import exceptions.CommentException;
 import exceptions.DestinationTraderException;
 import exceptions.VoucherException;
 import menus.MainMenu;
@@ -33,7 +30,7 @@ public class DestinationTraderRepo {
 	private Map<Integer, DestinationTrader> allDestinationTraders;
 	private static DestinationTraderRepo destinationTraderRepo = null;
 	private static final String DESTINATION_TRADER_JSON_FILE = ".//Json//destinationTraders.json";
-	private static File f;
+//	private static File f;
 
 	private DestinationTraderRepo() {
 		this.allDestinationTraders = new TreeMap<Integer, DestinationTrader>();
@@ -49,13 +46,14 @@ public class DestinationTraderRepo {
 
 	private static Map<Integer, DestinationTrader> getDestinationTraderFromJSONFILE() {
 		Gson gson = new Gson();
-		Map<Integer, DestinationTrader> map = null;
+		TreeMap<Integer, DestinationTrader> map = null;
 		try (Reader reader = new FileReader(DESTINATION_TRADER_JSON_FILE)) {
 			JsonElement json = gson.fromJson(reader, JsonElement.class);
 			String jsonInString = gson.toJson(json);
 
-			map = gson.fromJson(jsonInString, new TypeToken<Map<Integer, DestinationTrader>>() {
+			map = gson.fromJson(jsonInString, new TypeToken<TreeMap<Integer, DestinationTrader>>() {
 			}.getType());
+			DestinationTrader.id =  map.lastKey();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -79,36 +77,36 @@ public class DestinationTraderRepo {
 		}
 	}
 
-	public static List<Comment> getDestinationTradersCommentsToJSONFile() {
-		Gson gson = new Gson();
-		List<Comment> list = null;
-		try (Reader reader = new FileReader(f)) {
-			JsonElement json = gson.fromJson(reader, JsonElement.class);
-			String jsonInString = gson.toJson(json);
-
-			list = gson.fromJson(jsonInString, new TypeToken<List<Comment>>() {
-			}.getType());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (list == null) {
-			list = new ArrayList<>();
-		}
-		return list;
-
-	}
-
-	private void writeDestinationTradersCommentsToJSONFile(List<Comment> comments) {
-		Gson gson = new Gson();
-		String json = gson.toJson(comments);
-		try (FileWriter writer = new FileWriter(f)) {
-			gson.toJson(comments, writer);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static List<Comment> getDestinationTradersCommentsToJSONFile() {
+//		Gson gson = new Gson();
+//		List<Comment> list = null;
+//		try (Reader reader = new FileReader(f)) {
+//			JsonElement json = gson.fromJson(reader, JsonElement.class);
+//			String jsonInString = gson.toJson(json);
+//
+//			list = gson.fromJson(jsonInString, new TypeToken<List<Comment>>() {
+//			}.getType());
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		if (list == null) {
+//			list = new ArrayList<>();
+//		}
+//		return list;
+//
+//	}
+//
+//	private void writeDestinationTradersCommentsToJSONFile(List<Comment> comments) {
+//		Gson gson = new Gson();
+//		String json = gson.toJson(comments);
+//		try (FileWriter writer = new FileWriter(f)) {
+//			gson.toJson(comments, writer);
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void addNewDestinationTrader(DestinationTrader destinationTrader) throws DestinationTraderException {
 		if (destinationTrader == null)
@@ -144,19 +142,19 @@ public class DestinationTraderRepo {
 
 	}
 
-	public void addNewComment(Comment c) throws CommentException, IOException {
-		if (c == null)
-			throw new CommentException("Invalid comment");
-		DestinationTraderRepo.f = new File(
-				"Json" + File.separator + ("comments" + c.getDestination().getDestinationTraderID()) + ".json");
-		if (!DestinationTraderRepo.f.exists()) {
-			DestinationTraderRepo.f.createNewFile();
-		}
-		this.destinationTrader = c.getDestination();
-		destinationTrader.addComment(c);
-		this.writeDestinationTradersCommentsToJSONFile(destinationTrader.getComments());
-
-	}
+//	public void addNewComment(Comment c) throws CommentException, IOException {
+//		if (c == null)
+//			throw new CommentException("Invalid comment");
+//		DestinationTraderRepo.f = new File(
+//				"Json" + File.separator + ("comments" + c.getDestination().getDestinationTraderID()) + ".json");
+//		if (!DestinationTraderRepo.f.exists()) {
+//			DestinationTraderRepo.f.createNewFile();
+//		}
+//		this.destinationTrader = c.getDestination();
+//		destinationTrader.addComment(c);
+//		this.writeDestinationTradersCommentsToJSONFile(destinationTrader.getComments());
+//
+//	}
 
 	// Method that adds new user in Grabo/Json file
 	public void addNewTrader(DestinationTrader dt) throws DestinationTraderException {

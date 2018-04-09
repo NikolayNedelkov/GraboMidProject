@@ -6,17 +6,18 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
 import dataclasses.User;
 import dataclasses.Voucher;
 import exceptions.VoucherException;
-
 
 public class VoucherRepo {
 	private Voucher voucher;
@@ -25,10 +26,10 @@ public class VoucherRepo {
 	private static final String VOUCHER_JSON_FILE = ".//Json//vouchers.json";
 
 	private VoucherRepo() {
-		this.allVouchers = new TreeMap<Integer, Voucher>();
+		this.allVouchers = new HashMap<Integer, Voucher>();
 		this.allVouchers = getVochersFromJSONFILE();
 	}
-	
+
 	public static VoucherRepo getInstance() {
 		if (voucherRepo == null) {
 			voucherRepo = new VoucherRepo();
@@ -40,16 +41,21 @@ public class VoucherRepo {
 		return Collections.unmodifiableMap(allVouchers);
 	}
 
-	//Loading all vouchers from Json file
+	// Loading all vouchers from Json file
 	private Map<Integer, Voucher> getVochersFromJSONFILE() {
 		Gson gson = new Gson();
-		Map<Integer, Voucher> map = null;
+		TreeMap<Integer, Voucher> map = null;
 		try (Reader reader = new FileReader(VOUCHER_JSON_FILE)) {
 			JsonElement json = gson.fromJson(reader, JsonElement.class);
 			String jsonInString = gson.toJson(json);
 
-			map = gson.fromJson(jsonInString, new TypeToken<Map<String, User>>() {
+			map = gson.fromJson(jsonInString, new TypeToken<TreeMap<String, User>>() {
 			}.getType());
+			if (map!=null) {
+				Voucher.id = map.lastKey();
+			} else {
+				Voucher.id = 0;
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -61,10 +67,9 @@ public class VoucherRepo {
 
 	}
 
-	//Writing all vouchers to Json file
+	// Writing all vouchers to Json file
 	private void writeUsersToJSONFile(Map<Integer, Voucher> allVouchers) {
-		Gson gson = new Gson();
-		String json = gson.toJson(allVouchers);
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try (FileWriter writer = new FileWriter(VOUCHER_JSON_FILE)) {
 
 			gson.toJson(allVouchers, writer);
@@ -74,20 +79,20 @@ public class VoucherRepo {
 		}
 	}
 
-	//Adding new Voucher to VoucherRepo
+	// Adding new Voucher to VoucherRepo
 	public void addNewVoucher(Voucher v) throws VoucherException {
 		if (v == null)
 			throw new VoucherException("Invalid voucher to add");
 		allVouchers.put(v.getVoucherID(), v);
 		this.writeUsersToJSONFile(allVouchers);
 	}
-	
-	//Removing voucher from VoucherRepo
+
+	// Removing voucher from VoucherRepo
 	public void removeVoucher(Voucher v) throws VoucherException {
-		if(v==null)
+		if (v == null)
 			throw new VoucherException("Invalid voucher to remove");
 		for (Voucher voucher : allVouchers.values()) {
-			if(v.getVoucherID().equals(voucher.getVoucherID())) {
+			if (v.getVoucherID().equals(voucher.getVoucherID())) {
 				allVouchers.remove(v.getVoucherID());
 			}
 		}

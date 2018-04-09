@@ -6,12 +6,14 @@ public class Price {
 	private static final int MAX_PERCENT = 100;
 	private double oldPrice;
 	private int discount;
-	private double newPrice = getOldPrice() - ((getDiscount() / 100) * getOldPrice());
-	private double savedMoney = (getDiscount() / MAX_PERCENT) * getOldPrice();
+	private double newPrice;
+	private double savedMoney; 
 
 	public Price(double oldPrice, int discount) {
 		setOldPrice(oldPrice);
 		setDiscount(discount);
+		this.newPrice = (getOldPrice() - ((getDiscount() / 100) * getOldPrice()));
+		this.savedMoney = ((getDiscount() / MAX_PERCENT) * getOldPrice());
 	}
 
 	public double getOldPrice() {

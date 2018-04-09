@@ -21,7 +21,7 @@ public class DestinationTrader {
 
 					+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-	private static Integer id = 0;
+	public static Integer id = 0;
 	private Integer destinationTraderID;
 
 	private final String traderName;
@@ -151,7 +151,7 @@ public class DestinationTrader {
 	@Override
 	public String toString() {
 		return "DestinationTrader [destinationTraderID=" + destinationTraderID + ", traderName=" + traderName
-				+ ", email=" + email + ", information=" + information + ", address=" + address + ", rating=" + rating
+				+ ", email=" + email + ", address=" + address + ", rating=" + rating
 				+ "]";
 	}
 

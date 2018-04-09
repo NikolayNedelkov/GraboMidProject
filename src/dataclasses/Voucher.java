@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 //Voucher class, info for voucher 
 public class Voucher {
 	
-	private static Integer id = 0;
+	public static Integer id = 0;
 	private Integer voucherID;
 	
 	private String category;
@@ -75,7 +75,7 @@ public class Voucher {
 	@Override
 	public String toString() {
 		return "Voucher [voucherID=" + voucherID + ", category=" + category + ", price=" + price + ", vInfo=" + vInfo
-				+ ", date=" + date + ", destination=" + destination + "]";
+				+ ", date=" + date + "]";
 	}
 
 	

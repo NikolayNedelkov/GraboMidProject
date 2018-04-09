@@ -89,7 +89,6 @@ public class UserRepo {
 	// Method that writes all registered users to Json file
 	private void writeUsersToJSONFile(Map<String, User> users) {
 		Gson gson = new Gson();
-		String json = gson.toJson(users);
 		try (FileWriter writer = new FileWriter(USER_JSON_FILE)) {
 
 			gson.toJson(users, writer);
@@ -147,8 +146,12 @@ public class UserRepo {
 
 	// Viewing all vouchers
 	public void viewAllVouchers() {
-		for (Voucher v : VoucherRepo.getInstance().getAllVouchers().values()) {
-			System.out.println(v.toString());
+		if (VoucherRepo.getInstance().getAllVouchers().size()==0) {
+			for (Voucher v : VoucherRepo.getInstance().getAllVouchers().values()) {
+				System.out.println(v.toString());
+			}
+		} else {
+			MainMenu.displayHeader("No vouchers in GRABO !");
 		}
 	}
 
@@ -235,8 +238,8 @@ public class UserRepo {
 							String comment = MainMenu.askQuestion("Enter your comment: ", null);
 							String rating = MainMenu.askQuestion("Enter rating between 0 and 5: ", null);
 							Double rating2 = Double.parseDouble(rating);
-							DestinationTraderRepo.getInstance()
-									.addNewComment(new Comment(this.user, destinationTrader, comment, rating2));
+							CommentsRepo.getInstance().addNewComment(
+									new Comment(this.user, destinationTrader, comment, rating2), destinationTrader);
 							// destinationTrader.addComment(new Comment(this.user, destinationTrader,
 							// comment, rating2));
 						}

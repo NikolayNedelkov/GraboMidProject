@@ -1,2 +1,1 @@
-{"admin":{"userName":"admin","password":"admin","email":"admin@gmail.com","cart":{"myVouchers":{}},"isLogin":false},
-"stefan":{"userName":"stefan","password":"123456","email":"stefan@abv.bg","cart":{"myVouchers":{}},"isLogin":false}}
+{"admin":{"userName":"admin","password":"admin","email":"admin@gmail.com","cart":{"myVouchers":{}},"isLogin":false},"stefan":{"userName":"stefan","password":"123456","email":"stefan@abv.bg","cart":{"myVouchers":{}},"isLogin":false},"toni":{"userName":"toni","password":"tonitoni","email":"toni@abv.bg","cart":{"myVouchers":{}},"isLogin":false},"test":{"userName":"test","password":"test","email":"test@gmail.com","cart":{"myVouchers":{}},"isLogin":false}}
